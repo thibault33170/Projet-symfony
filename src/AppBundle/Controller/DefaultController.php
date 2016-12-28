@@ -26,7 +26,6 @@ class DefaultController extends Controller
     {
         $em = $this->get('doctrine')->getManager();
         $repo = $em->getRepository('AppBundle:TVShow');
-
         return [
             'shows' => $repo->findAll()
         ];
