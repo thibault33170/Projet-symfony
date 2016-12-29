@@ -9,6 +9,7 @@ use Symfony\Component\HttpFoundation\Request;
 
 class DefaultController extends Controller
 {
+
     /**
      * @Route("/", name="homepage")
      * @Template()
@@ -51,7 +52,12 @@ class DefaultController extends Controller
      */
     public function calendarAction()
     {
-        return [];
+        $em = $this->get('doctrine')->getManager();
+        $repo = $em->getRepository('AppBundle:TVShow');
+
+        return [
+            'shows' => $repo->findAll()
+        ];
     }
 
     /**

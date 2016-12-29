@@ -5,7 +5,28 @@
 {% block contents %}
     <section>
     	<div class="container">
-    		
+    		<h3>Liste des séries</h3>
+            <div class="row">
+    		{% for show in shows %}
+                {% for season in show.seasons %}
+                    {% for episode in season.episodes %}
+                        <ul>
+                            {% if date(episode.date) > date() %}
+                                <a href="{{ path('show', {id: show.id}) }}" class="tvshow col-sm-offset-3 col-sm-6">
+                                    <img class="pull-left" src="{{ web_image('uploads/'~show.image).resize(100, 100).png }}" />
+                                    <h4>{{ show.name }} ({{ show.seasons|length }} saisons)</h4>
+                                    <h6>Saison {{ season.number }} - Episode {{ episode.number }} - {{ episode.name }} - </h6>
+                                </a>
+                            {% endif %}
+                        </ul>
+                    {% endfor %}
+                {% endfor %}
+    		{% endfor %}
+            </div>
+
+    		{% if app.user %}
+    			<a href="{{ path('admin_add_show') }}">Ajouter une série</a>
+    		{% endif %}
     	</div>
     </section>
 {% endblock %}
