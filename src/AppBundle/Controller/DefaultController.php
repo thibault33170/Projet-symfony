@@ -61,6 +61,25 @@ class DefaultController extends Controller
     }
 
     /**
+     * @Route("/search", name="search")
+     * @Template()
+     */
+     public function searchAction(Request $request)
+    {
+        $search_content = $request->request->get('term');
+        
+        $em = $this->get('doctrine')->getManager();
+        $repo = $em->getRepository('AppBundle:TVShow');
+            
+        return [
+            'shows' => $repo->myTvShowsBySearch($search_content) ,
+            'search_content' => $search_content
+        ];
+        
+    }
+
+
+    /**
      * @Route("/login", name="login")
      * @Template()
      */
