@@ -16,6 +16,30 @@
     		{% endfor %}
             </div>
 
+            <div class=" row col-sm-6 col-sm-offset-3">
+                <ul class="pagination">
+                    <li>
+                        <a href="#" aria-label="Previous">
+                            <span aria-hidden="true">&laquo;</span>
+                        </a>
+                    </li>
+
+                    {% for page in pages %}
+                        <li>
+                            <a href="{{ path('shows', {'page': page}) }}">
+                                {{page}}
+                            </a>
+                        </li>
+                    {% endfor %}
+
+                    <li>
+                        <a href="#" aria-label="Next">
+                            <span aria-hidden="true">&raquo;</span>
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
     		{% if app.user %}
     			<a href="{{ path('admin_add_show') }}">Ajouter une série</a>
     		{% endif %}

@@ -23,12 +23,32 @@ class DefaultController extends Controller
      * @Route("/shows", name="shows")
      * @Template()
      */
-    public function showsAction()
+    public function showsAction(Request $request , $page = 1)
     {
+        $showsPerPages = 7;
+
         $em = $this->get('doctrine')->getManager();
         $repo = $em->getRepository('AppBundle:TVShow');
+
+        $selectedPage = $request->query->get('page');
+
+        if( !empty($selectedPage))
+            $page = $selectedPage;
+        
+        $shows = $repo->paginateShows($page, $showsPerPages);
+
+        $totalPages = ceil(count($shows) / $showsPerPages);        
+        $pagination = [];
+
+        for($i = 0; $i < $totalPages; $i++){
+            $pagination[$i] = $i + 1;
+        }
+
+        
         return [
-            'shows' => $repo->findAll()
+            'shows' => $shows,
+            'pages' => $pagination,
+            'page'  => $page
         ];
     }
 

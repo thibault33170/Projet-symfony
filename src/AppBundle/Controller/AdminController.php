@@ -161,10 +161,46 @@ class AdminController extends Controller
             $result = $omdb->search($data['keyword']);
             $result = $result->data->Search;
         }
-
+       
         return [
             'form' => $form->createView(),
             'result' => $result
         ];
+    }
+
+     /**
+     * @Route("/import/{id}", name="import")
+     * @Template()
+     */
+    public function ImportAction(Request $request, $id)
+    {
+        $omdb = new OMDbAPI(null, true);
+
+        // get details for IMDB ID $id
+        $result = $omdb->fetch('i', $id);
+
+        
+        if ($result['data']['Type'] == 'series') {
+            
+            $em = $this->get('doctrine')->getManager();
+            
+            //create a new tv show
+            $tv_show = new TVShow();
+
+            //set the values to it
+            $tv_show
+                ->setName($result['data']['Title'])
+                ->setSynopsis($result['data']['Plot'])
+                ->setImage($result['data']['Poster']);
+            
+            //save him
+            $em->persist($tv_show);
+            $em->flush();
+            
+            //redirect to the shows list page
+            return $this->redirectToRoute('shows');
+        } else {
+            return $this->redirectToRoute('admin_omdb');
+        }
     }
 }
